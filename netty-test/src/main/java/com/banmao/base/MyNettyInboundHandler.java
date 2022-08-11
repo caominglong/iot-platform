@@ -1,4 +1,4 @@
-package com.leadmap.base;
+package com.banmao.base;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
