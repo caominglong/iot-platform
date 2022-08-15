@@ -28,19 +28,25 @@ public class SocketServerPersist {
             Socket communicateSocket = serverSocket.accept();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(communicateSocket.getInputStream()));
             // 读取一行数据
-            String s = bufferedReader.readLine();
-            // 输出数据
-            System.out.println(s);
-            // 通知客户端，收到数据
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(communicateSocket.getOutputStream()));
-            if ("让我们开始数数".equals(s)) {
-                bufferedWriter.write("好的，呀～");
-                bufferedWriter.flush();
-            } else {
-                bufferedWriter.write("收到的数为：" + s);
-                bufferedWriter.flush();
+            String str = "";
+            while(true) {
+                if ((str = bufferedReader.readLine()) != null) {
+                    // 输出数据
+                    System.out.println(str);
+                }
+                // 通知客户端，收到数据
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(communicateSocket.getOutputStream()));
+                if ("让我们开始数数".equals(str)) {
+                    bufferedWriter.write("好的，呀～");
+                    bufferedWriter.write("\n");
+                    bufferedWriter.flush();
+                } else {
+                    bufferedWriter.write("收到的数为：" + str);
+                    bufferedWriter.write("\n");
+                    bufferedWriter.flush();
+                }
             }
-            communicateSocket.shutdownOutput();
+            // communicateSocket.shutdownOutput();
             // communicateSocket.close();
         } catch (IOException e) {
             e.printStackTrace();

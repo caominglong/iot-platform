@@ -25,35 +25,46 @@ public class SingleSocketClientPersist {
         Socket socket = new Socket(remoteAddress, port);
         boolean startFlag = true;
         int number = 1;
+        BufferedWriter bufferedWriter = null;
+        BufferedReader bufferedReader = null;
         while(true) {
-            BufferedWriter bufferedWriter = null;
-            BufferedReader bufferedReader = null;
             if (startFlag) {
                 bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 bufferedWriter.write("让我们开始数数");
+                bufferedWriter.write("\n");
                 bufferedWriter.flush();
-                socket.shutdownOutput();
+                // socket.shutdownOutput();
                 // 读取server返回的信息
                 bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String s = bufferedReader.readLine();
-                System.out.println("server说：" + s);
+                String sss = "";
+                if ((sss = bufferedReader.readLine()) != null) {
+                    System.out.println("Server说：" + sss);
+                }
                 startFlag = false;
             } else {
                 number++;
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                bufferedWriter.write(number);
+                // bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                bufferedWriter.write(number+"");
+                bufferedWriter.write("\n");
                 bufferedWriter.flush();
                 // 输出标志，表示"这句话讲完了"
-                socket.shutdownOutput();
+                // socket.shutdownOutput();
                 // 读取server返回的信息
-                bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String s1 = bufferedReader.readLine();
-                System.out.println(s1);
+                // bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String s1 = "";
+                if ((s1 = bufferedReader.readLine()) != null) {
+                    System.out.println(s1);
+                }
             }
-            // 关闭流
-            bufferedWriter.close();
-            bufferedReader.close();
+            if (number > 10) {
+                break;
+            }
+
         }
+         // 关闭流
+        bufferedWriter.close();
+        bufferedReader.close();
+        socket.close();
 
     }
 
