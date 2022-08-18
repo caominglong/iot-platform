@@ -14,11 +14,11 @@ import java.net.Socket;
  * @author: banmao
  * @date: 2022/8/16 16:42
  */
-public class SocketMultiClient1 {
+public class SocketMultiClient2 {
 
     private final Socket socket;
 
-    public  SocketMultiClient1(String host, int port) throws IOException {
+    public SocketMultiClient2(String host, int port) throws IOException {
         // 1、创建socket，并连接服务器
         socket = new Socket(host, port);
     }
@@ -26,9 +26,9 @@ public class SocketMultiClient1 {
 
     public static void main(String[] args) {
         // 端口写死，为8085
-        SocketMultiClient1 socketMultiClient1 = null;
+        SocketMultiClient2 socketMultiClient1 = null;
         try {
-            socketMultiClient1 = new SocketMultiClient1(InetAddress.getLocalHost().getHostAddress(), 8085);
+            socketMultiClient1 = new SocketMultiClient2(InetAddress.getLocalHost().getHostAddress(), 8085);
             socketMultiClient1.run();
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,7 +41,7 @@ public class SocketMultiClient1 {
         while (number < 3) {
             number++;
             // 2.1、往服务端写数据
-            System.out.println("客户端1发消息！");
+            System.out.println("客户端2发消息！");
             writeRequest();
             // 2.2、读取服务端的数据
             Thread thread = new Thread(this::readResponse);
@@ -66,7 +66,6 @@ public class SocketMultiClient1 {
             byte[] bytes = new byte[1024];
             int readByte;
             while ((readByte = inputStream.read(bytes)) != -1) {
-                System.out.print("server return：");
                 System.out.println(new String(bytes, 0, readByte));
             }
         } catch (IOException e) {

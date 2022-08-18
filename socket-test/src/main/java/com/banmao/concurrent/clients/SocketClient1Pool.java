@@ -14,11 +14,11 @@ import java.net.Socket;
  * @author: banmao
  * @date: 2022/8/16 16:42
  */
-public class SocketMultiClient1 {
+public class SocketClient1Pool {
 
     private final Socket socket;
 
-    public  SocketMultiClient1(String host, int port) throws IOException {
+    public SocketClient1Pool(String host, int port) throws IOException {
         // 1、创建socket，并连接服务器
         socket = new Socket(host, port);
     }
@@ -26,9 +26,9 @@ public class SocketMultiClient1 {
 
     public static void main(String[] args) {
         // 端口写死，为8085
-        SocketMultiClient1 socketMultiClient1 = null;
+        SocketClient1Pool socketMultiClient1 = null;
         try {
-            socketMultiClient1 = new SocketMultiClient1(InetAddress.getLocalHost().getHostAddress(), 8085);
+            socketMultiClient1 = new SocketClient1Pool(InetAddress.getLocalHost().getHostAddress(), 8085);
             socketMultiClient1.run();
         } catch (IOException e) {
             e.printStackTrace();

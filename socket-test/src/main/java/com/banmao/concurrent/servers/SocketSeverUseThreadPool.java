@@ -7,30 +7,33 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Company: 杭州领图信息科技有限公司
  *
- * @description:
- * 处理多个客户端，以下采用的是每一个客户端启动一个线程
+ * @description: 处理多个客户端，以下采用的是每一个客户端启动一个线程
  * @author: banmao
  * @date: 2022/8/16 17:22
  */
-public class SocketSeverConcurrent {
+public class SocketSeverUseThreadPool {
 
+    private final int NTHREADS = 100;
     private final ServerSocket serverSocket;
-    /** 存储每个线程对应的socket连接，key用线程名 */
+    /**
+     * 存储每个线程对应的socket连接，key用线程名
+     */
     private Map<String, Socket> socketMap = new HashMap<>(100);
 
-    public SocketSeverConcurrent(int port) throws IOException {
+    public SocketSeverUseThreadPool(int port) throws IOException {
         // 1、创建一个serverSocket，并监听端口port
         serverSocket = new ServerSocket(port);
     }
 
     public void run() throws IOException {
-        while(true) {
+        while (true) {
             // 2、接收客户端连接
             Socket client = serverSocket.accept();
             handleClient(client);
@@ -39,7 +42,7 @@ public class SocketSeverConcurrent {
 
     public static void main(String[] args) throws IOException {
         // 端口写死，8085
-        SocketSeverConcurrent socketSeverConcurrent = new SocketSeverConcurrent(8085);
+        SocketSeverUseThreadPool socketSeverConcurrent = new SocketSeverUseThreadPool(8085);
         System.out.println("server在线");
         socketSeverConcurrent.run();
     }
@@ -52,7 +55,7 @@ public class SocketSeverConcurrent {
         thread.start();
     }
 
-    private void readResponse(){
+    private void readResponse() {
         try {
             int number = 1;
             Socket socket = null;
@@ -83,7 +86,7 @@ public class SocketSeverConcurrent {
         OutputStream outputStream = socket.getOutputStream();
         byte[] bytes = new byte[1024];
         int n;
-        while((n = System.in.read(bytes)) != -1) {
+        while ((n = System.in.read(bytes)) != -1) {
             outputStream.write(bytes, 0, n);
             // 写完即退出，不然会一直阻塞
             break;
